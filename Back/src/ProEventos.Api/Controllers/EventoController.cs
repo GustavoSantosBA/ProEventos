@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProEventos.Api.Data.Context;
 using ProEventos.Api.Models;
 
 namespace ProEventos.Api.Controllers
@@ -36,22 +37,23 @@ namespace ProEventos.Api.Controllers
                 DataEvento = DateTime.Now.AddDays(2).ToString("dd/MM/yyyy")
             },
         };
+        private readonly DataContext _context;
 
-        public EventoController()
+        public EventoController(DataContext context )
         {
-              
+            _context = context;              
         }
 
         [HttpGet]
         public IEnumerable<Evento> Get()
         {
-            return _evento;
+            return _context.Eventos;
         }     
 
         [HttpGet("{id}")]
-        public IEnumerable<Evento> GetById(int id)
+        public Evento GetById(int id)
         {
-            return _evento.Where(e => e.EventoId == id);
+            return _context.Eventos.FirstOrDefault(e => e.EventoId == id);
         }    
     }
 }
